@@ -12,12 +12,11 @@ jobs:
       - run:
           name: ️️🏗️ pip dev requirements
           command: |
-            uname -m
-            sudo pip install --upgrade virtualenv --progress-bar off
+            uname -m  
             sudo apt update
             sudo apt install python3
-            python -m venv venv || virtualenv venv && . venv/bin/activate
-            pip3 install --upgrade pip
+            sudo apt-get install python3-pip
+            pip3 install tox
             pip3 install -r test-requirements.txt
             flake8
             flake8 --config=.flake8-tests src/test_typing_extensions.py
