@@ -21,6 +21,26 @@ jobs:
              cd src
              python3 -m unittest test_typing_extensions.py
              
+   build-medium-arm64:
+    machine:
+      image: ubuntu-2004:202101-01
+    resource_class: arm.medium
+    working_directory: ~/dash
+    steps:
+      
+      - checkout
+      - run:
+          name: ️️requirements
+          command: |
+             uname -m 
+             sudo apt update
+             sudo apt install python3
+             sudo apt-get install python3-pip
+             pip3 install tox
+             pip3 install -r test-requirements.txt
+             cd src
+             python3 -m unittest test_typing_extensions.py
+             
    lint-unit-39: &lint-unit
     working_directory: ~/dash
     docker:
@@ -46,3 +66,4 @@ workflows:
      
       - lint-unit-39
       - build-medium-amd64
+      - build-medium-arm64
