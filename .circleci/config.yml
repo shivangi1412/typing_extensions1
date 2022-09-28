@@ -2,7 +2,25 @@ version: 2.1
 orbs:
   win: circleci/windows@2.4.0
 jobs:
-
+   build-medium-amd64:
+    machine:
+      image: ubuntu-2004:202101-01
+   
+    working_directory: ~/dash
+    steps:      
+      - checkout
+      - run:
+          name: ️️requirements
+          command: |
+             uname -m 
+             sudo apt update
+             sudo apt install python3
+             sudo apt-get install python3-pip
+             pip3 install tox
+             pip3 install -r test-requirements.txt
+             cd src
+             python3 -m unittest test_typing_extensions.py
+             
    lint-unit-39: &lint-unit
     working_directory: ~/dash
     docker:
@@ -27,3 +45,4 @@ workflows:
     jobs:
      
       - lint-unit-39
+      - build-medium-amd64
