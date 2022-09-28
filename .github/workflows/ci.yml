@@ -37,6 +37,36 @@ jobs:
           # accidentally pick up typing_extensions as installed by a dependency
           cd src
           python -m unittest test_typing_extensions.py
+          
+  build-aarch64:
+    strategy:
+      matrix:
+        pyver: [ cp38-cp38, cp39-cp39 ]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    env:
+      py: /opt/python/${{ matrix.pyver }}/bin/python
+      img: quay.io/pypa/manylinux2014_aarch64
+      
+    steps:
+      - name: 📥 Checkout the repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Test typing_extensions
+        continue-on-error: ${{ matrix.python-version == '3.11-dev' }}
+        run: |
+          # Be wary of running `pip install` here, since it becomes easy for us to
+          # accidentally pick up typing_extensions as installed by a dependency
+          cd src
+          python -m unittest test_typing_extensions.py
+
 
   linting:
     name: Lint
