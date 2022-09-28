@@ -1,0 +1,30 @@
+version: 2.1
+orbs:
+  win: circleci/windows@2.4.0
+jobs:
+
+   lint-unit-39: &lint-unit
+    working_directory: ~/dash
+    docker:
+      - image: circleci/python:3.9.2-buster-node-browsers
+    steps:
+      - checkout
+      - run:
+          name: ️️🏗️ pip dev requirements
+          command: |
+            uname -m
+            sudo pip install --upgrade virtualenv --progress-bar off
+            sudo apt update
+            sudo apt install python3
+            python -m venv venv || virtualenv venv && . venv/bin/activate
+            pip3 install --upgrade pip
+            pip3 install -r test-requirements.txt
+            flake8
+            flake8 --config=.flake8-tests src/test_typing_extensions.py
+       
+workflows:
+  version: 2
+  python3.9:
+    jobs:
+     
+      - lint-unit-39
